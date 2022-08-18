@@ -17,4 +17,5 @@ Map<String, dynamic> _$FactToJson(Fact instance) => <String, dynamic>{
       '_id': instance.id,
       '__v': instance.v,
       'text': instance.text,
+      'createdAt': instance.createdDate,
     };

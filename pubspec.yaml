@@ -42,6 +42,8 @@ dependencies:
   flutter_bloc: ^8.1.1
   hive: ^2.2.3
   path_provider: ^2.0.11
+  loading_gifs: ^0.3.0
+
 
 dev_dependencies:
   flutter_test:

@@ -1,13 +1,4 @@
-
-
-
-import 'package:cats/model/fact.dart';
-
 abstract class EventFact {}
 class EventFactLoad extends EventFact {}
-class EventFactNext extends EventFact {
-  //Fact readedFact;
-
- // EventFactNext(this.readedFact);
-}
+class EventFactNext extends EventFact {}
 class EventFactAll extends EventFact {}

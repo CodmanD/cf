@@ -5,7 +5,7 @@ import 'package:cats/constants.dart';
 import 'package:cats/model/fact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:loading_gifs/loading_gifs.dart';
 
 class PageHome extends StatefulWidget {
   const PageHome({Key? key}) : super(key: key);
@@ -20,28 +20,18 @@ class _PageHomeState extends State<PageHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: const Text(TITLE_APP), centerTitle: true),
       body: _buildBody(),
-      bottomNavigationBar: BottomNavigationBar(
-          onTap: (i) async {
-            //print("----CLick $i");
-            switch (i) {
-              case 0:
-                context.read<BlocFact>().add(EventFactAll());
-                await Navigator.pushNamed(context, '/all');
-                break;
-              case 1:
-                print("----CLick 1");
-                context.read<BlocFact>().add(EventFactNext());
-                break;
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.navigate_next),
+        onPressed: () {
+          setState(() {
+            {
+              context.read<BlocFact>().add(EventFactNext());
             }
-          },
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.library_books), label: ""),
-            BottomNavigationBarItem(icon: Icon(Icons.navigate_next), label: ""),
-          ]),
-
-      //_buildBottomNavigationBar(context),
+          });
+        },
+      ),
     );
   }
 
@@ -49,44 +39,32 @@ class _PageHomeState extends State<PageHome> {
     final state = context.watch<BlocFact>().state;
     if (state is StateFactLoading) {
       context.watch<BlocFact>().add(EventFactLoad());
-      return const CircularProgressIndicator();
+      return const Center(child: CircularProgressIndicator());
     } else if (state is StateFactLoaded) {
       _fact = state.fact;
       return Column(children: [
-        Center(child: Text(_fact.text)),
+        Center(
+          child: Text(_fact.text, style: Theme.of(context).textTheme.headlineSmall),
+        ),
         Flexible(
           child: Center(
-              child: FadeInImage.memoryNetwork(
-            fit: BoxFit.cover,
-            placeholder: kTransparentImage,
-            image: URL_IMAGE,
-          )),
+            child: FadeInImage.assetNetwork(
+              fit: BoxFit.cover,
+              placeholder: cupertinoActivityIndicator,
+              image: URL_IMAGE,
+            ),
+          ),
         ),
+        IconButton(
+          icon: const Icon(Icons.library_books),
+          onPressed: () async {
+            context.read<BlocFact>().add(EventFactAll());
+            await Navigator.pushNamed(context, PAGE_ALL_ROUTE);
+          },
+        )
       ]);
-    } else
-      return Container();
+    } else {
+      return const CircularProgressIndicator();
+    }
   }
-
-// Widget _buildBottomNavigationBar(BuildContext c) {
-//   return BottomNavigationBar(
-//       onTap: (i) async{
-//         print("----CLick index= $i");
-//         switch (i) {
-//           case 0:
-//             print("----CLick push");
-//             await Navigator.pushNamed(context,'/all');
-//             break;
-//           case 1:
-//           print("----CLick 0");
-//           context.watch<BlocFact>().add(EventFactNext(_fact));
-//           print("----CLick STATE = " + context.watch<BlocFact>().state.toString());
-//           break;
-//
-//         }
-//       },
-//       items: const [
-//         BottomNavigationBarItem(icon: Icon(Icons.navigate_next), label: ""),
-//         BottomNavigationBarItem(icon: Icon(Icons.repeat), label: ""),
-//       ]);
-// }
 }
