@@ -44,7 +44,6 @@ dependencies:
   path_provider: ^2.0.11
   loading_gifs: ^0.3.0
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

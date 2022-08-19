@@ -17,6 +17,8 @@ class PageHome extends StatefulWidget {
 class _PageHomeState extends State<PageHome> {
   late Fact _fact;
 
+  GlobalKey _keyImage = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +29,7 @@ class _PageHomeState extends State<PageHome> {
         onPressed: () {
           setState(() {
             {
+              _keyImage = GlobalKey();
               context.read<BlocFact>().add(EventFactNext());
             }
           });
@@ -46,15 +49,7 @@ class _PageHomeState extends State<PageHome> {
         Center(
           child: Text(_fact.text, style: Theme.of(context).textTheme.headlineSmall),
         ),
-        Flexible(
-          child: Center(
-            child: FadeInImage.assetNetwork(
-              fit: BoxFit.cover,
-              placeholder: cupertinoActivityIndicator,
-              image: URL_IMAGE,
-            ),
-          ),
-        ),
+        _buildImage(),
         IconButton(
           icon: const Icon(Icons.library_books),
           onPressed: () async {
@@ -66,5 +61,21 @@ class _PageHomeState extends State<PageHome> {
     } else {
       return const CircularProgressIndicator();
     }
+  }
+
+  Widget _buildImage() {
+    return Flexible(
+      child: Center(
+        child: FadeInImage.assetNetwork(
+          imageErrorBuilder: (_, __, ___) {
+            return const Text('ERROR 404');
+          },
+          key: _keyImage,
+          fit: BoxFit.cover,
+          placeholder: cupertinoActivityIndicator,
+          image: URL_IMAGE,
+        ),
+      ),
+    );
   }
 }
