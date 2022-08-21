@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:cats/constants.dart';
 import 'package:cats/model/fact.dart';
 import 'package:cats/network/api_service.dart';
 import 'package:dio/dio.dart';
@@ -29,14 +30,22 @@ class Repositories {
   }
 
   static saveFact(Fact fact) async {
-    var box = await Hive.openBox<Fact>('facts');
+    var box = await Hive.openBox<Fact>(FACTS_URL);
     await box.add(fact);
-    var value = await box.getAt(0);
+    await box.close();
+  }
+
+  static deleteFacts() async {
+    var box = await Hive.openBox<Fact>(FACTS_URL);
+    await box.delete(FACTS_URL);
+    await box.clear();
+    await box.close();
   }
 
   static Future<List<Fact>> getSavedFacts() async {
-    var box = await Hive.openBox<Fact>('facts');
+    var box = await Hive.openBox<Fact>(FACTS_URL);
     var facts = box.values.toList();
+    await box.close();
     return facts;
   }
 }

@@ -12,17 +12,22 @@ class BlocFact extends Bloc<EventFact, StateFact> {
     Repositories.init();
     on<EventFactLoad>((event, emit) async {
       _fact = await Repositories.getRandomFact();
+      await Repositories.saveFact(_fact);
       emit(StateFactLoaded(_fact));
     });
     on<EventFactNext>((event, emit) async {
-      await Repositories.saveFact(_fact);
       _fact = await Repositories.getRandomFact();
+      await Repositories.saveFact(_fact);
       emit(StateFactLoaded(_fact));
     });
     on<EventFactAll>((event, emit) async {
-      await Repositories.saveFact(_fact);
       List<Fact> savedFacts = await Repositories.getSavedFacts();
       emit(StateFactsAll(savedFacts));
+    });
+
+    on<EventDeleteFact>((event, emit) async {
+      await Repositories.deleteFacts();
+      emit(StateDeleteFact());
     });
   }
 }

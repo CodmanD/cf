@@ -20,7 +20,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: ROUTES,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          appBarTheme: const AppBarTheme(
+              iconTheme: IconThemeData(color: Colors.greenAccent),
+              actionsIconTheme: IconThemeData(color: Colors.greenAccent)),
+          primarySwatch: Colors.purple,
         ),
         home: const PageHome(),
       ),

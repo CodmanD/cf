@@ -3,6 +3,7 @@ import 'package:cats/model/fact.dart';
 abstract class StateFact {}
 
 class StateFactLoading extends StateFact {}
+class StateDeleteFact extends StateFact {}
 class StateFactLoaded extends StateFact {
   Fact fact;
   StateFactLoaded(this.fact);
